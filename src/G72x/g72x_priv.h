@@ -112,6 +112,12 @@ void private_init_state (G72x_STATE *state_ptr) ;
 #define ALWAYS_INLINE
 #endif
 
+/* Added by RSN */
+#if defined(_WIN32) | defined(_WIN64)
+#define inline __inline
+#endif
+/* **** */
+
 static inline int ALWAYS_INLINE
 arith_shift_left (int x, int shift)
 {	return (int) (((unsigned int) x) << shift) ;

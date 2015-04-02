@@ -22,6 +22,11 @@
 #define ALWAYS_INLINE
 #endif
 
+/* Added by RSN */
+#if defined(_WIN32) | defined(_WIN64)
+#define inline __inline
+#endif
+/* **** */
 
 static inline int32_t ALWAYS_INLINE
 arith_shift_left (int32_t x, int shift)

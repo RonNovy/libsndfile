@@ -25,7 +25,26 @@
 #include <inttypes.h>
 
 
-#if COMPILER_IS_GCC && CPU_IS_X86
+#if _WIN32
+#include <intrin.h>
+static inline int16_t
+ENDSWAP_16 (int16_t x)
+{	return _byteswap_ushort(x);
+} /* ENDSWAP_16 */
+
+static inline int32_t
+ENDSWAP_32 (int32_t x)
+{	return _byteswap_ulong(x);
+} /* ENDSWAP_32 */
+
+static inline int64_t
+ENDSWAP_64X (int64_t x)
+{	return _byteswap_uint64(x);
+} /* ENDSWAP_64 */
+
+#define ENDSWAP_64 ENDSWAP_64X
+
+#elif COMPILER_IS_GCC && CPU_IS_X86
 
 static inline int16_t
 ENDSWAP_16 (int16_t x)

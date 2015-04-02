@@ -33,8 +33,11 @@
 #define SFCONFIG_H
 
 /* Include the Autoconf generated file. */
+#ifdef _WIN32
+#include "winconfig.h"
+#else
 #include "config.h"
-
+#endif
 /* Now fiddle the values. */
 
 #ifndef HAVE_ALSA_ASOUNDLIB_H

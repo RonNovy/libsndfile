@@ -18,6 +18,11 @@
 /* Added by Erik de Castro Lopo */
 
 
+/* Added by RSN */
+#if defined(_WIN32) | defined(_WIN64)
+#define inline __inline
+#endif
+/* **** */
 
 typedef short				int16_t ;		/* 16 bit signed int	*/
 typedef int					int32_t ;	/* 32 bit signed int	*/
