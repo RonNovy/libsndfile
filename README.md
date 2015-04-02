@@ -1,7 +1,10 @@
 # libsndfile
 
 Note: This is a fork of the popular libsndfile for use with the AudioConvert
-command line application and DLLs.
+command line application and DLLs.  There is no guarantee that this forked 
+version will work for you at all.  The entire project, in its current form, is 
+being privately developed, but the entire project will eventually be opensourced 
+and uploaded to git.
 
 libsndfile is a C library for reading and writing files containing sampled audio
 data.
