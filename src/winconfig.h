@@ -6,7 +6,7 @@
 /* src/config.h.in.  Generated from configure.ac by autoheader.  */
 
 /* The following was added to provide the necessary support on Windows */
-#if /* defined(LIBSNDFILE_PRIVATE_CONFIG) && */ !defined(LIBSNDFILE_HAVE_CONFIG)
+#if defined(LIBSNDFILE_PRIVATE_CONFIG) && !defined(LIBSNDFILE_HAVE_CONFIG)
 #define LIBSNDFILE_HAVE_CONFIG 1
 #pragma warning (disable : 4244)
 #pragma warning (disable : 4761)
@@ -41,6 +41,7 @@ SF_lrint(double flt)
 
 	return intgr;
 }
+#define lrint SF_lrint
 
 __inline long int 
 SF_lrintf(float flt)
@@ -54,6 +55,7 @@ SF_lrintf(float flt)
 
 	return intgr;
 }
+#define lrintf SF_lrintf
 
 __inline long long int
 SF_llrint(double flt)
@@ -67,6 +69,7 @@ SF_llrint(double flt)
 
 	return intgr;
 }
+#define llrint SF_llrint
 
 __inline long long int
 SF_llrintf(float flt)
@@ -80,6 +83,8 @@ SF_llrintf(float flt)
 
 	return intgr;
 }
+#define llrintf SF_llrintf
+
 
 /* Nor does it have the snprintf function */
 #define snprintf _snprintf

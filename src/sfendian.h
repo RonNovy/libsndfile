@@ -22,7 +22,12 @@
 #include "sfconfig.h"
 
 #include <stdint.h>
-#include <inttypes.h>
+
+#if defined (_WIN32)
+	#define PRId64 "lld"
+#else
+	#include <inttypes.h>
+#endif
 
 
 #if _WIN32

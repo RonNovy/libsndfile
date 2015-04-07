@@ -24,7 +24,12 @@
 #include <string.h>
 #include <time.h>
 #include <ctype.h>
-#include <inttypes.h>
+
+#if defined (_WIN32)
+	#define PRId64 "lld"
+#else
+	#include <inttypes.h>
+#endif
 
 #include "sndfile.h"
 #include "sfendian.h"
