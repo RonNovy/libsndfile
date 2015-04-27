@@ -3,7 +3,7 @@
 // lbsndfile package/version information
 
 /* Name of package */
-#define PACKAGE "libsndfile"
+#define PACKAGE "libsndfile for AudioConvert"
 
 /* Define to the address where bug reports for this package should be sent. */
 #define PACKAGE_BUGREPORT "rsn10100 (at) gmail (dot) com"

@@ -822,12 +822,12 @@ psf_log_syserr (SF_PRIVATE *psf, int error)
 	if (psf->error == 0)
 	{	psf->error = SFE_SYSTEM ;
 
-		FormatMessage (
+		FormatMessageA (
 			FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM,
 			NULL,
 			error,
 			MAKELANGID (LANG_NEUTRAL, SUBLANG_DEFAULT),
-			(LPTSTR) &lpMsgBuf,
+			(LPSTR) &lpMsgBuf,
 			0,
 			NULL
 			) ;

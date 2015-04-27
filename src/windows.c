@@ -33,10 +33,10 @@
 
 extern int sf_errno ;
 
-static void copy_filename (SF_PRIVATE * psf, LPCWSTR wpath) ;
+static void copy_filename (SF_PRIVATE * psf, const wchar_t* wpath) ;
 
 SNDFILE*
-sf_wchar_open (LPCWSTR wpath, int mode, SF_INFO *sfinfo)
+sf_wchar_open (const wchar_t* wpath, int mode, SF_INFO *sfinfo)
 {	SF_PRIVATE 	*psf ;
 	char utf8name [512] ;
 
@@ -64,7 +64,7 @@ sf_wchar_open (LPCWSTR wpath, int mode, SF_INFO *sfinfo)
 
 
 static void
-copy_filename (SF_PRIVATE *psf, LPCWSTR wpath)
+copy_filename (SF_PRIVATE *psf, const wchar_t* wpath)
 {	const wchar_t *cwcptr ;
 	wchar_t *wcptr ;
 

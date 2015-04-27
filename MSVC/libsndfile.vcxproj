@@ -656,6 +656,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
     <TargetName>libsndfile-1</TargetName>
+    <CustomBuildAfterTargets>Link</CustomBuildAfterTargets>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
@@ -667,7 +668,7 @@
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>LIBSNDFILE_PRIVATE_CONFIG;_CRT_SECURE_NO_WARNINGS;WIN32;_DEBUG;_WINDOWS;_USRDLL;LIBSNDFILE_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;LIBSNDFILE_EXPORTS;LIBSNDFILE_PRIVATE_CONFIG;FLAC__HAS_OGG;FLAC__NO_DLL;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>$(SolutionDir)..\src\;$(SolutionDir)..\src\G72x\;$(SolutionDir)..\src\GSM610\;$(SolutionDir)..\..\ogg\include;$(SolutionDir)..\..\FLAC\include;$(SolutionDir)..\..\vorbis\include</AdditionalIncludeDirectories>
     </ClCompile>
@@ -705,7 +706,7 @@
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>LIBSNDFILE_PRIVATE_CONFIG;_CRT_SECURE_NO_WARNINGS;WIN32;NDEBUG;_WINDOWS;_USRDLL;LIBSNDFILE_EXPORTS;FLAC__HAS_OGG;FLAC__NO_DLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;LIBSNDFILE_EXPORTS;LIBSNDFILE_PRIVATE_CONFIG;FLAC__HAS_OGG;FLAC__NO_DLL;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>$(SolutionDir)..\src\;$(SolutionDir)..\src\G72x\;$(SolutionDir)..\src\GSM610\;$(SolutionDir)..\..\ogg\include;$(SolutionDir)..\..\FLAC\include;$(SolutionDir)..\..\vorbis\include</AdditionalIncludeDirectories>
       <BufferSecurityCheck>true</BufferSecurityCheck>
@@ -714,13 +715,20 @@
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <ModuleDefinitionFile>..\src\libsndfile-1.def</ModuleDefinitionFile>
       <AdditionalDependencies>win_utf8_io_static.lib;libogg_static.lib;libvorbis_static.lib;libFLAC_static.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(SolutionDir)$(Configuration)\</AdditionalLibraryDirectories>
+      <SetChecksum>true</SetChecksum>
     </Link>
+    <CustomBuildStep>
+      <Command>signtool sign /v /f RSN-SPC.pfx $(OutDir)$(TargetName)$(TargetExt)</Command>
+    </CustomBuildStep>
+    <CustomBuildStep>
+      <Message>Signing DLL</Message>
+    </CustomBuildStep>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>

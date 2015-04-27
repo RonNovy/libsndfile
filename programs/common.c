@@ -48,7 +48,7 @@
 void
 sfe_copy_data_fp (SNDFILE *outfile, SNDFILE *infile, int channels, int normalize)
 {	static double	data [BUFFER_LEN], max ;
-	int		frames, readcount, k ;
+	sf_count_t		frames, readcount, k ;
 
 	frames = BUFFER_LEN / channels ;
 	readcount = frames ;
@@ -78,7 +78,7 @@ sfe_copy_data_fp (SNDFILE *outfile, SNDFILE *infile, int channels, int normalize
 void
 sfe_copy_data_int (SNDFILE *outfile, SNDFILE *infile, int channels)
 {	static int	data [BUFFER_LEN] ;
-	int		frames, readcount ;
+	sf_count_t	frames, readcount ;
 
 	frames = BUFFER_LEN / channels ;
 	readcount = frames ;
