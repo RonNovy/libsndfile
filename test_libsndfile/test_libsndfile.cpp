@@ -98,7 +98,7 @@ struct
 	{ SF_STR_SOFTWARE,		"Software string."		},
 	{ SF_STR_ARTIST,		"Artist string."		},
 	{ SF_STR_COMMENT,		"Comment string."		},
-	{ SF_STR_DATE,			"Date string."			},
+	{ SF_STR_DATE,			"2015-06-16"			},
 	{ SF_STR_ALBUM,			"Album string."			},
 	{ SF_STR_LICENSE,		"License string."		},
 	{ SF_STR_TRACKNUMBER,	"Track number string."	},
@@ -110,7 +110,7 @@ struct
 static void cpp_gen_test()
 {
 	#define SRATE 44100
-	#define CHANS 8
+	#define CHANS 2
 	#define STYPE float
 
 	puts("\nAttempting to open \"gen.wav\" for output.\n");
@@ -118,9 +118,10 @@ static void cpp_gen_test()
 	dsp::dspfile gen8("gen8.wav", SFM_WRITE, SF_FORMAT_WAV | SF_FORMAT_PCM_U8, CHANS, SRATE);
 	dsp::dspfile gen16("gen16.wav", SFM_WRITE, SF_FORMAT_WAV | SF_FORMAT_PCM_16, CHANS, SRATE);
 	dsp::dspfile gen24("gen24.wav", SFM_WRITE, SF_FORMAT_WAV | SF_FORMAT_PCM_24, CHANS, SRATE);
+	dsp::dspfile gencaf("gen32.caf", SFM_WRITE, SF_FORMAT_CAF | SF_FORMAT_ALAC_16, CHANS, SRATE);
 
 	// Check that the file was opened.
-	if ((!gen.is_open()) || (!gen8.is_open()) || (!gen16.is_open()) || (!gen24.is_open()))
+	if ((!gen.is_open()) || (!gen8.is_open()) || (!gen16.is_open()) || (!gen24.is_open()) || (!gencaf.is_open()))
 	{
 		puts("\n\nError: Could not open gen.wav for output.");
 		puts(gen.get_error_str());
@@ -135,6 +136,7 @@ static void cpp_gen_test()
 		gen8.set_string(sf_str_array[i].id, sf_str_array[i].str);
 		gen16.set_string(sf_str_array[i].id, sf_str_array[i].str);
 		gen24.set_string(sf_str_array[i].id, sf_str_array[i].str);
+		gencaf.set_string(sf_str_array[i].id, sf_str_array[i].str);
 	}
 
 	// Fill bext chunk with data and send to libsndfile
@@ -146,14 +148,15 @@ static void cpp_gen_test()
 	gen8.command(SFC_SET_BROADCAST_INFO, bwf.data(), bwf.size());
 	gen16.command(SFC_SET_BROADCAST_INFO, bwf.data(), bwf.size());
 	gen24.command(SFC_SET_BROADCAST_INFO, bwf.data(), bwf.size());
+	gencaf.command(SFC_SET_BROADCAST_INFO, bwf.data(), bwf.size());
 
 	// Create multi-channel buffer.
 	puts("Creating multi-channel buffer for \"gen.wav\".");
-	//std::vector<STYPE> buf(SRATE * CHANS);
 	dsp::dspvector<STYPE>	buf(SRATE * CHANS);
 	dsp::dspvector<uint8_t>	buf8(SRATE * CHANS);
 	dsp::dspvector<int16_t>	buf16(SRATE * CHANS);
 	dsp::dspvector<int24_t>	buf24(SRATE * CHANS);
+	dsp::dspvector<>		bufcaf(SRATE * CHANS);
 
 	// Setup parameters for creating a different sine wave for each channel
 	puts("Setting multi-channel sine wave parameters for \"gen.wav\".");
@@ -161,7 +164,7 @@ static void cpp_gen_test()
 	double xsin[CHANS];
 	for (int ch = 0; ch < CHANS; ++ch)
 	{
-		rad[ch] = ((2.0 * 3.1415926535897932384626433832795028804) / ((double)SRATE)) * (500.0 + (500.0 * ch));
+		rad[ch] = ((2.0 * 3.14159265358979323846264338327950288) / ((double)SRATE)) * (500.0 + (500.0 * ch));
 		xsin[ch] = 0;
 	}
 
@@ -171,10 +174,11 @@ static void cpp_gen_test()
 	{
 		for (int ch = 0; ch < CHANS; ++ch)
 		{
-			buf[i + ch]		= (STYPE)(std::sin(xsin[ch]) * dBFS_to_scalar(-3.0));
-			buf8[i + ch]	= (STYPE)(std::sin(xsin[ch]) * dBFS_to_scalar(-3.0));
-			buf16[i + ch]	= (STYPE)(std::sin(xsin[ch]) * dBFS_to_scalar(-3.0));
-			buf24[i + ch]	= (STYPE)(std::sin(xsin[ch]) * dBFS_to_scalar(-3.0));
+			buf[i + ch]		= (std::sin(xsin[ch]) * dBFS_to_scalar(-3.0));
+			buf8[i + ch]	= (std::sin(xsin[ch]) * dBFS_to_scalar(-3.0));
+			buf16[i + ch]	= (std::sin(xsin[ch]) * dBFS_to_scalar(-3.0));
+			buf24[i + ch]	= (std::sin(xsin[ch]) * dBFS_to_scalar(-3.0));
+			bufcaf[i + ch]	= (std::sin(xsin[ch]) * dBFS_to_scalar(-3.0));
 			xsin[ch] += rad[ch];
 		}
 	}
@@ -185,6 +189,7 @@ static void cpp_gen_test()
 	gen8.write(buf8);
 	gen16.write(buf16);
 	gen24.write(buf24);
+	gencaf.write(bufcaf);
 
 	// Exit this function and everything is automatically cleaned up.
 	puts("Closing \"gen.wav\".");

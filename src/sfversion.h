@@ -12,7 +12,7 @@
 #define PACKAGE_NAME "libsndfile"
 
 /* Define to the full name and version of this package. */
-#define PACKAGE_STRING "libsndfile 1.0.25"
+#define PACKAGE_STRING "libsndfile 1.0.26"
 
 /* Define to the one symbol short name of this package. */
 #define PACKAGE_TARNAME "libsndfile"
@@ -21,14 +21,14 @@
 #define PACKAGE_URL "https://github.com/RonNovy/libsndfile"
 
 /* Define to the version of this package. */
-#define PACKAGE_VERSION "1.0.25.0"
+#define PACKAGE_VERSION "1.0.26.0"
 
 /* Version number of package */
-#define VERSION "1.0.25"
+#define VERSION "1.0.26"
 
 /* Resource definitions */
-#define WIN_RC_VERSION 1,0,25,0
-#define CLEAN_VERSION "1.0.25.0\0"
+#define WIN_RC_VERSION 1,0,26,0
+#define CLEAN_VERSION "1.0.26.0\0"
 
 
 #endif // ifndef_SFVERSION_H_

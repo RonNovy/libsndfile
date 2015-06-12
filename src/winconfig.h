@@ -29,6 +29,7 @@
 /*	Win32 doesn't seem to have these functions.
 **	Therefore implement inline versions of these functions here.
 */
+#if !defined(_WIN64)
 __inline long int
 SF_lrint(double flt)
 {
@@ -85,6 +86,15 @@ SF_llrintf(float flt)
 }
 #define llrintf SF_llrintf
 
+#else
+
+#include <math.h>
+//#define lrint SF_lrint
+//#define lrintf SF_lrintf
+//#define llrint SF_llrint
+//#define llrintf SF_llrintf
+
+#endif // if !defined(_WIN64)
 
 /* Nor does it have the snprintf function */
 #define snprintf _snprintf
