@@ -133,8 +133,8 @@ void genSweep(double *buffer, int numFrames, int numChannels, int sampleRate, fl
 // Generate some files.
 static void cpp_gen_test()
 {
-	#define SRATE 96000
-	#define CHANS 2
+	#define SRATE 48000
+	#define CHANS 1
 	#define FRAMES (SRATE * 2)
 	#define STYPE float
 
@@ -143,7 +143,7 @@ static void cpp_gen_test()
 	dsp::dspfile gen8("gen8.wav", SFM_WRITE, SF_FORMAT_WAV | SF_FORMAT_PCM_U8, CHANS, SRATE);
 	dsp::dspfile gen16("gen16.wav", SFM_WRITE, SF_FORMAT_WAV | SF_FORMAT_PCM_16, CHANS, SRATE);
 	dsp::dspfile gen24("gen24.wav", SFM_WRITE, SF_FORMAT_WAV | SF_FORMAT_PCM_24, CHANS, SRATE);
-	dsp::dspfile gencaf("gen.caf", SFM_WRITE, SF_FORMAT_CAF | SF_FORMAT_ALAC_16, CHANS, SRATE);
+	dsp::dspfile gencaf("gen.caf", SFM_WRITE, SF_FORMAT_CAF | SF_FORMAT_ALAC_24, CHANS, SRATE);
 
 	// Check that the file was opened.
 	if ((!gen32.is_open()) || (!gen8.is_open()) || (!gen16.is_open()) || (!gen24.is_open()) || (!gencaf.is_open()))
@@ -236,7 +236,20 @@ static void cpp_gen_test()
 	gen8.write(buf8);
 	gen16.write(buf16);
 	gen24.write(buf24);
+
+#if 0
+	#define CAFBUFNUM (8192)
+	float *pos = (float*)bufcaf.data();
+	int num = bufcaf.size() / CAFBUFNUM;
+	int mod = bufcaf.size() % CAFBUFNUM;
+	for (int i = 0; i < num; ++i, pos += CAFBUFNUM)
+		gencaf.write(pos, CAFBUFNUM);
+	if (mod)
+		gencaf.write(pos, mod);
+
+#else
 	gencaf.write(bufcaf);
+#endif
 
 	// Exit this function and everything is automatically cleaned up.
 	puts("Closing \"gen.wav\".");
