@@ -1,10 +1,12 @@
-# libsndfile
+# libsndfile for MSVC
 
-Note: This is a fork of the popular libsndfile for use with the AudioConvert
-command line application and DLLs.  There is no guarantee that this forked 
-version will work for you at all.  The entire project, in its current form, is 
-being privately developed, but the entire project will eventually be opensourced 
-and uploaded to git.
+Note: This is a fork of the popular libsndfile library with project files and 
+code modifications for building in Visual Studio.  A test program is also 
+included, but it may not build for you as it depends on code that has not yet
+been released.  This repository may disappear in the future as libsndfile gets
+updated...
+
+# libsndfile
 
 libsndfile is a C library for reading and writing files containing sampled audio
 data.
