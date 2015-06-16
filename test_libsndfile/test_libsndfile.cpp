@@ -1,5 +1,6 @@
 // test libsndfile functions.
-//
+//   Note: This code will not compile without the c++dsp library.  It relies on several c++ types
+// that are specific to that library and it may not be public yet.
 #define _CRT_SECURE_NO_WARNINGS
 
 #include <cstdio>
@@ -134,7 +135,7 @@ void genSweep(double *buffer, int numFrames, int numChannels, int sampleRate, fl
 static void cpp_gen_test()
 {
 	#define SRATE 48000
-	#define CHANS 1
+	#define CHANS 6
 	#define FRAMES (SRATE * 2)
 	#define STYPE float
 
@@ -143,7 +144,7 @@ static void cpp_gen_test()
 	dsp::dspfile gen8("gen8.wav", SFM_WRITE, SF_FORMAT_WAV | SF_FORMAT_PCM_U8, CHANS, SRATE);
 	dsp::dspfile gen16("gen16.wav", SFM_WRITE, SF_FORMAT_WAV | SF_FORMAT_PCM_16, CHANS, SRATE);
 	dsp::dspfile gen24("gen24.wav", SFM_WRITE, SF_FORMAT_WAV | SF_FORMAT_PCM_24, CHANS, SRATE);
-	dsp::dspfile gencaf("gen.caf", SFM_WRITE, SF_FORMAT_CAF | SF_FORMAT_ALAC_24, CHANS, SRATE);
+	dsp::dspfile gencaf("gen.caf", SFM_WRITE, SF_FORMAT_CAF | SF_FORMAT_ALAC_32, CHANS, SRATE);
 
 	// Check that the file was opened.
 	if ((!gen32.is_open()) || (!gen8.is_open()) || (!gen16.is_open()) || (!gen24.is_open()) || (!gencaf.is_open()))

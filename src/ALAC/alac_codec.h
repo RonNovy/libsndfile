@@ -30,7 +30,7 @@
 
 #include "ALACAudioTypes.h"
 
-#define		ALAC_FRAME_LENGTH	4096
+#define		ALAC_FRAME_LENGTH	(4096)
 
 struct BitBuffer ;
 

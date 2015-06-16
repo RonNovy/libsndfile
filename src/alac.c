@@ -170,7 +170,7 @@ alac_close	(SF_PRIVATE *psf)
 	{	ALAC_ENCODER *penc = &plac->encoder ;
 		SF_CHUNK_INFO chunk_info ;
 		sf_count_t readcount ;
-		uint8_t **kuki_data = alloca_t(plac->kuki_size, uint8_t*);
+		uint8_t **kuki_data = malloc(plac->kuki_size * sizeof(uint8_t));//alloca_t(plac->kuki_size, uint8_t*);
 		uint32_t pakt_size = 0, saved_partial_block_frames;
 
 		plac->final_write_block = 1 ;
@@ -209,6 +209,8 @@ alac_close	(SF_PRIVATE *psf)
 			fclose (plac->enctmp) ;
 			remove (plac->enctmpname) ;
 			} ;
+
+		free(kuki_data);
 		} ;
 
 	if (plac->pakt_info)
@@ -347,7 +349,7 @@ alac_writer_init (SF_PRIVATE *psf)
 			return SFE_UNIMPLEMENTED ;
 		} ;
 
-	plac->frames_per_block = ALAC_FRAME_LENGTH ;
+	plac->frames_per_block = ALAC_FRAME_LENGTH;
 
 	plac->pakt_info = alac_pakt_alloc (2000) ;
 
@@ -399,10 +401,14 @@ alac_reader_calc_frames (SF_PRIVATE *psf, ALAC_PRIVATE *plac)
 	return frames ;
 } /* alac_reader_calc_frames */
 
+
+/* FIXME: This is really ugly and can cause buffer overflow, but it prevents a stack overflow..... */
+static uint8_t byte_buffer[8 * ALAC_BYTE_BUFFER_SIZE];
+
 static int
 alac_decode_block (SF_PRIVATE *psf, ALAC_PRIVATE *plac)
 {	ALAC_DECODER *pdec = &plac->decoder ;
-	uint8_t		*byte_buffer = alloca_t(psf->sf.channels * ALAC_BYTE_BUFFER_SIZE, uint8_t);
+	//uint8_t		*byte_buffer = alloca_t(psf->sf.channels * ALAC_BYTE_BUFFER_SIZE, uint8_t);
 	uint32_t	packet_size ;
 	BitBuffer	bit_buffer ;
 
@@ -438,7 +444,7 @@ alac_decode_block (SF_PRIVATE *psf, ALAC_PRIVATE *plac)
 static int
 alac_encode_block (SF_PRIVATE * psf, ALAC_PRIVATE *plac)
 {	ALAC_ENCODER *penc = &plac->encoder ;
-	uint8_t *byte_buffer = alloca_t(psf->sf.channels * ALAC_BYTE_BUFFER_SIZE, uint8_t);
+	//uint8_t *byte_buffer = alloca_t(psf->sf.channels * ALAC_BYTE_BUFFER_SIZE, uint8_t);
 	uint32_t num_bytes = 0 ;
 
 	alac_encode (penc, plac->partial_block_frames, plac->buffer, byte_buffer, &num_bytes) ;
@@ -762,7 +768,7 @@ in_alac_write_d (SF_PRIVATE *psf, const double *ptr, sf_count_t len)
 	return total ;
 } /* in_alac_write_d */
 
-
+#define MAX_ENC_FRAMES 4096
 static sf_count_t
 alac_write_s(SF_PRIVATE *psf, const short *ptr, sf_count_t len)
 {
@@ -775,7 +781,7 @@ alac_write_s(SF_PRIVATE *psf, const short *ptr, sf_count_t len)
 	if ((plac = (ALAC_PRIVATE*)psf->codec_data) == NULL)
 		return 0;
 
-	block_size = plac->channels * 4096;
+	block_size = (MAX_ENC_FRAMES * plac->channels);
 	num_blocks = len / block_size;
 	mod = len % block_size;
 
@@ -800,7 +806,7 @@ alac_write_i(SF_PRIVATE *psf, const int *ptr, sf_count_t len)
 	if ((plac = (ALAC_PRIVATE*)psf->codec_data) == NULL)
 		return 0;
 
-	block_size = plac->channels * 4096;
+	block_size = (MAX_ENC_FRAMES * plac->channels);
 	num_blocks = len / block_size;
 	mod = len % block_size;
 
@@ -825,7 +831,7 @@ alac_write_f(SF_PRIVATE *psf, const float *ptr, sf_count_t len)
 	if ((plac = (ALAC_PRIVATE*)psf->codec_data) == NULL)
 		return 0;
 
-	block_size = plac->channels * 4096;
+	block_size = (MAX_ENC_FRAMES * plac->channels);
 	num_blocks = len / block_size;
 	mod = len % block_size;
 
@@ -850,7 +856,7 @@ alac_write_d(SF_PRIVATE *psf, const double *ptr, sf_count_t len)
 	if ((plac = (ALAC_PRIVATE*)psf->codec_data) == NULL)
 		return 0;
 
-	block_size = plac->channels * 4096;
+	block_size = (MAX_ENC_FRAMES * plac->channels);
 	num_blocks = len / block_size;
 	mod = len % block_size;
 

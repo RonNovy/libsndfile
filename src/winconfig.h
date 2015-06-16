@@ -21,7 +21,7 @@
 #define X_OK (W_OK | R_OK)
 
 
-#define alloca_t(x, y)	_malloca(x * sizeof(y))
+//#define alloca_t(x, y)	_malloca(x * sizeof(y))
 #define ssize_t			SSIZE_T
 #define __func__		__FUNCTION__
 #define inline			__inline
