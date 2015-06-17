@@ -1006,13 +1006,11 @@ alac_encode (ALAC_ENCODER *p, uint32_t numSamples,
 		const int32_t *		inputBuffer ;
 		uint32_t			tag ;
 		uint32_t			channelIndex ;
-		//uint32_t			inputIncrement ;
 		uint8_t				stereoElementTag ;
 		uint8_t				monoElementTag ;
 		uint8_t				lfeElementTag ;
 
 		inputBuffer		= theReadBuffer ;
-		//inputIncrement	= ((p->mBitDepth + 7) / 8) ;
 
 		stereoElementTag	= 0 ;
 		monoElementTag		= 0 ;
@@ -1031,7 +1029,7 @@ alac_encode (ALAC_ENCODER *p, uint32_t numSamples,
 
 					status = EncodeMono (p, &bitstream, inputBuffer, numChannels, channelIndex, numSamples) ;
 
-					inputBuffer++; //inputBuffer += inputIncrement ;
+					inputBuffer++;
 					channelIndex++;
 					monoElementTag++ ;
 					break ;
@@ -1042,7 +1040,7 @@ alac_encode (ALAC_ENCODER *p, uint32_t numSamples,
 
 					status = EncodeStereo (p, &bitstream, inputBuffer, numChannels, channelIndex, numSamples) ;
 
-					inputBuffer += 2;// (inputIncrement * 2);
+					inputBuffer += 2;
 					channelIndex += 2 ;
 					stereoElementTag++ ;
 					break ;
@@ -1053,7 +1051,7 @@ alac_encode (ALAC_ENCODER *p, uint32_t numSamples,
 
 					status = EncodeMono (p, &bitstream, inputBuffer, numChannels, channelIndex, numSamples) ;
 
-					inputBuffer++; //inputBuffer += inputIncrement ;
+					inputBuffer++;
 					channelIndex++ ;
 					lfeElementTag++ ;
 					break ;

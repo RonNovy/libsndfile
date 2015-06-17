@@ -451,7 +451,7 @@ sfe_codec_name (int format)
 		case SF_FORMAT_G723_40 : return "g723 40kbps" ;
 		case SF_FORMAT_DWVW_12 : return "12 bit DWVW" ;
 		case SF_FORMAT_DWVW_16 : return "16 bit DWVW" ;
-		case SF_FORMAT_DWVW_24 : return "14 bit DWVW" ;
+		case SF_FORMAT_DWVW_24 : return "24 bit DWVW" ;
 		case SF_FORMAT_DWVW_N : return "DWVW" ;
 		case SF_FORMAT_DPCM_8 : return "8 bit DPCM" ;
 		case SF_FORMAT_DPCM_16 : return "16 bit DPCM" ;

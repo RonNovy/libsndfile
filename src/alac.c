@@ -644,7 +644,7 @@ alac_seek (SF_PRIVATE *psf, int mode, sf_count_t offset)
 */
 
 static inline sf_count_t
-in_alac_write_s(SF_PRIVATE *psf, const short *ptr, sf_count_t len)
+alac_write_s(SF_PRIVATE *psf, const short *ptr, sf_count_t len)
 {
 	ALAC_PRIVATE *plac;
 	int			*iptr ;
@@ -672,10 +672,10 @@ in_alac_write_s(SF_PRIVATE *psf, const short *ptr, sf_count_t len)
 		} ;
 
 	return total ;
-} /* in_alac_write_s */
+} /* alac_write_s */
 
 static inline sf_count_t
-in_alac_write_i(SF_PRIVATE *psf, const int *ptr, sf_count_t len)
+alac_write_i(SF_PRIVATE *psf, const int *ptr, sf_count_t len)
 {	ALAC_PRIVATE *plac ;
 	int			*iptr ;
 	int			k, writecount ;
@@ -702,10 +702,10 @@ in_alac_write_i(SF_PRIVATE *psf, const int *ptr, sf_count_t len)
 		} ;
 
 	return total ;
-} /* in_alac_write_i */
+} /* alac_write_i */
 
 static inline sf_count_t
-in_alac_write_f (SF_PRIVATE *psf, const float *ptr, sf_count_t len)
+alac_write_f (SF_PRIVATE *psf, const float *ptr, sf_count_t len)
 {	ALAC_PRIVATE *plac ;
 	void		(*convert) (const float *, int *t, int, int) ;
 	int			*iptr ;
@@ -728,16 +728,17 @@ in_alac_write_f (SF_PRIVATE *psf, const float *ptr, sf_count_t len)
 		plac->partial_block_frames += writecount / plac->channels ;
 		total += writecount ;
 		len -= writecount ;
+		ptr += writecount ;
 
 		if (plac->partial_block_frames >= plac->frames_per_block)
 			alac_encode_block (psf, plac) ;
 		} ;
 
 	return total ;
-} /* in_alac_write_f */
+} /* alac_write_f */
 
 static inline sf_count_t
-in_alac_write_d (SF_PRIVATE *psf, const double *ptr, sf_count_t len)
+alac_write_d (SF_PRIVATE *psf, const double *ptr, sf_count_t len)
 {	ALAC_PRIVATE *plac ;
 	void		(*convert) (const double *, int *t, int, int) ;
 	int			*iptr ;
@@ -760,114 +761,15 @@ in_alac_write_d (SF_PRIVATE *psf, const double *ptr, sf_count_t len)
 		plac->partial_block_frames += writecount / plac->channels ;
 		total += writecount ;
 		len -= writecount ;
+		ptr += writecount ;
 
 		if (plac->partial_block_frames >= plac->frames_per_block)
 			alac_encode_block (psf, plac) ;
 		} ;
 
 	return total ;
-} /* in_alac_write_d */
-
-#define MAX_ENC_FRAMES 4096
-static sf_count_t
-alac_write_s(SF_PRIVATE *psf, const short *ptr, sf_count_t len)
-{
-	sf_count_t total = 0;
-	int i, block_size;
-	int num_blocks;
-	int mod;
-	ALAC_PRIVATE *plac;
-
-	if ((plac = (ALAC_PRIVATE*)psf->codec_data) == NULL)
-		return 0;
-
-	block_size = (MAX_ENC_FRAMES * plac->channels);
-	num_blocks = len / block_size;
-	mod = len % block_size;
-
-	for (i = 0; i < num_blocks; ++i, ptr += block_size)
-		total += in_alac_write_s(psf, ptr, block_size);
-
-	if (mod > 0)
-		total += in_alac_write_s(psf, ptr, mod);
-
-	return total;
-} /* alac_write_s */
-
-static sf_count_t
-alac_write_i(SF_PRIVATE *psf, const int *ptr, sf_count_t len)
-{
-	sf_count_t total = 0;
-	int i, block_size;
-	int num_blocks;
-	int mod;
-	ALAC_PRIVATE *plac;
-
-	if ((plac = (ALAC_PRIVATE*)psf->codec_data) == NULL)
-		return 0;
-
-	block_size = (MAX_ENC_FRAMES * plac->channels);
-	num_blocks = len / block_size;
-	mod = len % block_size;
-
-	for (i = 0; i < num_blocks; ++i, ptr += block_size)
-		total += in_alac_write_i(psf, ptr, block_size);
-
-	if (mod > 0)
-		total += in_alac_write_i(psf, ptr, mod);
-
-	return total;
-} /* alac_write_i */
-
-static sf_count_t
-alac_write_f(SF_PRIVATE *psf, const float *ptr, sf_count_t len)
-{
-	sf_count_t total = 0;
-	int i, block_size;
-	int num_blocks;
-	int mod;
-	ALAC_PRIVATE *plac;
-
-	if ((plac = (ALAC_PRIVATE*)psf->codec_data) == NULL)
-		return 0;
-
-	block_size = (MAX_ENC_FRAMES * plac->channels);
-	num_blocks = len / block_size;
-	mod = len % block_size;
-
-	for (i = 0; i < num_blocks; ++i, ptr += block_size)
-		total += in_alac_write_f(psf, ptr, block_size);
-
-	if (mod > 0)
-		total += in_alac_write_f(psf, ptr, mod);
-
-	return total;
-} /* alac_write_f */
-
-static sf_count_t
-alac_write_d(SF_PRIVATE *psf, const double *ptr, sf_count_t len)
-{
-	sf_count_t total = 0;
-	int i, block_size;
-	int num_blocks;
-	int mod;
-	ALAC_PRIVATE *plac;
-
-	if ((plac = (ALAC_PRIVATE*)psf->codec_data) == NULL)
-		return 0;
-
-	block_size = (MAX_ENC_FRAMES * plac->channels);
-	num_blocks = len / block_size;
-	mod = len % block_size;
-
-	for (i = 0; i < num_blocks; ++i, ptr += block_size)
-		total += in_alac_write_d(psf, ptr, block_size);
-
-	if (mod > 0)
-		total += in_alac_write_d(psf, ptr, mod);
-
-	return total;
 } /* alac_write_d */
+
 
 
 /*==============================================================================
