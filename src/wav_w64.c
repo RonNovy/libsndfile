@@ -318,7 +318,8 @@ wav_w64_read_fmt_chunk (SF_PRIVATE *psf, int fmtsize)
 					/* It's probably wise to ignore the channel mask if it is all zero */
 					free (psf->channel_map) ;
 
-					if ((psf->channel_map = calloc (psf->sf.channels, sizeof (psf->channel_map [0]))) == NULL)
+					//if ((psf->channel_map = calloc (psf->sf.channels, sizeof (psf->channel_map [0]))) == NULL)
+					if ((psf->channel_map = calloc (psf->sf.channels, sizeof (int))) == NULL)
 						return SFE_MALLOC_FAILED ;
 
 					/* Terminate the buffer we're going to append_snprintf into. */

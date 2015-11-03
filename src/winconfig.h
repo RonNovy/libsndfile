@@ -29,7 +29,7 @@
 /*	Win32 doesn't seem to have these functions.
 **	Therefore implement inline versions of these functions here.
 */
-#if !defined(_WIN64)
+#if !defined(_WIN64) && (_MSC_VER < 1800)
 __inline long int
 SF_lrint(double flt)
 {
@@ -96,8 +96,10 @@ SF_llrintf(float flt)
 
 #endif // if !defined(_WIN64)
 
-/* Nor does it have the snprintf function */
+/* Nor does it have the snprintf function... Well, 2015 does */
+#if _MSC_VER < 1900
 #define snprintf _snprintf
+#endif
 
 /* The above was added to provide the necessary support on Windows */
 
